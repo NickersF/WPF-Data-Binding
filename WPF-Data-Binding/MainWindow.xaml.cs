@@ -1,5 +1,7 @@
-﻿using System;
+﻿using iRely.Common.Ioc;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +28,11 @@ namespace WPF_Data_Binding
             InitializeComponent();
         }
 
+        private int originalId;
+        private string originalFirstName;
+        private string originalLastName;
+        private string originalEmail;
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             learningSQLDataSet learningSQLDataSet = ((learningSQLDataSet)(this.FindResource("learningSQLDataSet")));
@@ -36,21 +43,77 @@ namespace WPF_Data_Binding
             employeeViewSource.View.MoveCurrentToFirst();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void AddUser(object sender, RoutedEventArgs e)
         {
-            employeeTableAdapter employeeTableAdapter = new employeeTableAdapter();
+            learningSQLDataSet learningSQLDataSet = ((learningSQLDataSet)(this.FindResource("learningSQLDataSet")));
+            employeeTableAdapter addEmployeeDataAdapter = new employeeTableAdapter();
             Random random = new Random();
 
-            int id = random.Next(0, 1000);
-            string firstName = firstNameTextBox.Text;
-            string lastName = lastNameTextBox.Text;
-            string email = emailTextBox.Text;
+            int employeeId = random.Next(0, 1000);
+            string firstName = addUserFirstName.Text;
+            string lastName = addUserLastName.Text;
+            string email = addUserEmail.Text;
 
-            employeeTableAdapter.Insert(id, firstName, lastName, email);
+            addEmployeeDataAdapter.Insert(employeeId, firstName, lastName, email);
 
-            firstNameTextBox.Text = "";
-            lastNameTextBox.Text = "";
-            emailTextBox.Text = "";
+            addUserFirstName.Text = "";
+            addUserLastName.Text = "";
+            addUserEmail.Text = "";
+
+            addEmployeeDataAdapter.ClearBeforeFill = true;
+            addEmployeeDataAdapter.Fill(learningSQLDataSet.employee);
+        }
+
+        private void EditUser(object sender, RoutedEventArgs e)
+        {
+            learningSQLDataSet learningSQLDataSet = ((learningSQLDataSet)(this.FindResource("learningSQLDataSet")));
+            employeeTableAdapter editEmployeeTableAdapter = new employeeTableAdapter();
+
+            int id = int.Parse(editUserId.Text);
+            string firstName = editUserFirstName.Text;
+            string lastName = editUserLastName.Text;
+            string email = editUserEmail.Text;
+
+            learningSQLDataSet.employeeDataTable updatedEmployeeTable = new learningSQLDataSet.employeeDataTable();
+
+            editEmployeeTableAdapter.Update(firstName, lastName, email, originalId, originalFirstName, originalLastName, originalEmail);
+            editEmployeeTableAdapter.ClearBeforeFill = true;
+            editEmployeeTableAdapter.Fill(learningSQLDataSet.employee);
+        }
+
+        private void DeleteUser(object sender, RoutedEventArgs e)
+        {
+            learningSQLDataSet learningSQLDataSet = ((learningSQLDataSet)(this.FindResource("learningSQLDataSet")));
+            employeeTableAdapter deleteEmployeeTableAdapter = new employeeTableAdapter();
+            DataRowView dataRowView = (DataRowView)employeeDataGrid.SelectedItem;
+
+            if ((dataRowView != null) && (employeeDataGrid.SelectedItem.GetType() == typeof(System.Data.DataRowView)))
+            {
+                deleteEmployeeTableAdapter.Delete(originalId, originalFirstName, originalLastName, originalEmail);
+                deleteEmployeeTableAdapter.ClearBeforeFill = true;
+                deleteEmployeeTableAdapter.Fill(learningSQLDataSet.employee);
+            }
+            else
+            {
+                return;
+            }
+
+        }
+
+        private void employeeDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataRowView dataRowView = (DataRowView)employeeDataGrid.SelectedItem;
+
+            if ((dataRowView != null) && (employeeDataGrid.SelectedItem.GetType() == typeof(System.Data.DataRowView)))
+            {
+                originalId = Convert.ToInt32(dataRowView.Row[0]);
+                originalFirstName = (string)dataRowView.Row[1];
+                originalLastName = (string)dataRowView.Row[2];
+                originalEmail = (string)dataRowView[3];
+            } else
+            {
+                return;
+            }
         }
     }
 }

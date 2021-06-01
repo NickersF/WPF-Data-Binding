@@ -5,72 +5,128 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_Data_Binding"
         mc:Ignorable="d"
-        Title="MainWindow" Height="768" Width="1366" Loaded="Window_Loaded">
+        Title="Employee Editor" Height="768" Width="1366" Loaded="Window_Loaded">
     <Window.Resources>
         <local:learningSQLDataSet x:Key="learningSQLDataSet"/>
         <CollectionViewSource x:Key="employeeViewSource" Source="{Binding employee, Source={StaticResource learningSQLDataSet}}"/>
     </Window.Resources>
-    <Grid DataContext="{StaticResource employeeViewSource}">
-        <DataGrid x:Name="employeeDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="10,10,728,427" RowDetailsVisibilityMode="VisibleWhenSelected">
-            <DataGrid.Columns>
-                <DataGridTextColumn x:Name="idColumn" Binding="{Binding Id}" Header="Id" Width="SizeToHeader"/>
-                <DataGridTextColumn x:Name="firstNameColumn" Binding="{Binding FirstName}" Header="First Name" Width="Auto"/>
-                <DataGridTextColumn x:Name="lastNameColumn" Binding="{Binding LastName}" Header="Last Name" Width="Auto"/>
-                <DataGridTextColumn x:Name="emailColumn" Binding="{Binding email}" Header="email" Width="Auto"/>
-            </DataGrid.Columns>
-        </DataGrid>
-        <Grid x:Name="grid1" HorizontalAlignment="Left" Margin="715,512,0,0" VerticalAlignment="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-        </Grid>
-        <Grid x:Name="grid2" HorizontalAlignment="Left" Margin="728,87,0,0" VerticalAlignment="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-        </Grid>
-        <Grid x:Name="grid3" HorizontalAlignment="Left" Margin="720,50,0,0" VerticalAlignment="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Label Content="First Name:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="0" VerticalAlignment="Center"/>
-            <TextBox x:Name="firstNameTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="24" Margin="6,2,0,6" Grid.Row="0" Text="{Binding FirstName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
-        </Grid>
-        <Grid x:Name="grid4" HorizontalAlignment="Left" Margin="720,92,0,0" VerticalAlignment="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Label Content="Last Name:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="0" VerticalAlignment="Center"/>
-            <TextBox x:Name="lastNameTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="24" Margin="6,3,0,5" Grid.Row="0" Text="{Binding LastName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
-        </Grid>
-        <Grid x:Name="grid5" HorizontalAlignment="Left" Margin="720,129,0,0" VerticalAlignment="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Label Content="email:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="0" VerticalAlignment="Center"/>
-            <TextBox x:Name="emailTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="22" Margin="33,6,-27,4" Grid.Row="0" Text="{Binding email, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
-        </Grid>
-        <Button Content="Add Employee" HorizontalAlignment="Left" Margin="833,180,0,0" VerticalAlignment="Top" Width="88" Click="Button_Click"/>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" />
+                <MenuItem Header="_Open" />
+                <MenuItem Header="_Save" />
+                <Separator />
+                <MenuItem Header="_Exit" />
+            </MenuItem>
+        </Menu>
 
-    </Grid>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBar DockPanel.Dock="Bottom">
+                <StatusBarItem>
+                    <TextBlock Name="lblCursorPosition" Text="Status Bar" />
+                </StatusBarItem>
+            </StatusBar>
+        </StatusBar>
+
+        <Grid DataContext="{StaticResource employeeViewSource}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80*" MinWidth="400"/>
+                <ColumnDefinition Width="8"/>
+                <ColumnDefinition Width="17*" MinWidth="256"/>
+            </Grid.ColumnDefinitions>
+
+            <DataGrid x:Name="employeeDataGrid"  Grid.Column="0" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" RowDetailsVisibilityMode="VisibleWhenSelected" BorderThickness="0,1,1,1" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" SelectionChanged="employeeDataGrid_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="idColumn" Binding="{Binding Id}" Header="Id" Width="Auto"/>
+                    <DataGridTextColumn x:Name="firstNameColumn" Binding="{Binding FirstName}" Header="First Name" Width="*"/>
+                    <DataGridTextColumn x:Name="lastNameColumn" Binding="{Binding LastName}" Header="Last Name" Width="*"/>
+                    <DataGridTextColumn x:Name="emailColumn" Binding="{Binding email}" Header="email" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"></GridSplitter>
+
+            <ScrollViewer Grid.Column="2">
+                <Border x:Name="gridEditorControlsBorder" Grid.Column="1" BorderThickness="1" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}">
+                    <StackPanel>
+                        <Expander x:Name="addEmployeeExpander"
+                              IsExpanded="True">
+                            <Expander.Header>
+                                <TextBlock FontSize="18" FontFamily="Segoe UI Light">Add New Employee</TextBlock>
+                            </Expander.Header>
+                            <GroupBox Margin="10" Padding="10">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">Add Employee Editor</TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <StackPanel>
+                                    <TextBlock>First name:</TextBlock>
+                                    <TextBox x:Name="addUserFirstName" Margin="0,0,0,6" />
+                                    <TextBlock>Last name:</TextBlock>
+                                    <TextBox x:Name="addUserLastName"  Margin="0,0,0,6" />
+                                    <TextBlock>Email address:</TextBlock>
+                                    <TextBox x:Name="addUserEmail" Margin="0,0,0,6" />
+                                    <Button Margin="0,10" Click="AddUser">Add User</Button>
+                                </StackPanel>
+                            </GroupBox>
+                        </Expander>
+                        <Separator></Separator>
+                        <Expander x:Name="editEmployeeExpander"
+                              IsExpanded="True">
+                            <Expander.Header>
+                                <TextBlock FontSize="18" FontFamily="Segoe UI Light">Edit Employee</TextBlock>
+                            </Expander.Header>
+                            <GroupBox Margin="10" Padding="10">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">Edit Selected Employee</TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <StackPanel>
+                                    <TextBlock>Employee Id:</TextBlock>
+                                    <TextBlock x:Name="editUserId" Text="{Binding Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}">-</TextBlock>
+                                    <TextBlock>First name:</TextBlock>
+                                    <TextBox x:Name="editUserFirstName" Text="{Binding FirstName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Padding="0,0,0,4" Margin="0,0,0,6" />
+                                    <TextBlock>Last name:</TextBlock>
+                                    <TextBox x:Name="editUserLastName" Text="{Binding LastName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6" />
+                                    <TextBlock>Email address:</TextBlock>
+                                    <TextBox x:Name="editUserEmail" Text="{Binding email, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6" />
+                                    <Button Margin="0,10" Click="EditUser">Edit User</Button>
+                                </StackPanel>
+                            </GroupBox>
+                        </Expander>
+                        <Separator></Separator>
+                        <Expander x:Name="deleteEmployeeExpander"
+                              IsExpanded="True">
+                            <Expander.Header>
+                                <TextBlock FontSize="18" FontFamily="Segoe UI Light">Delete Employee</TextBlock>
+                            </Expander.Header>
+                            <GroupBox Margin="10" Padding="10">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">Delete Selected Employee</TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <StackPanel>
+                                    <TextBlock FontWeight="Bold">Employee Id:</TextBlock>
+                                    <TextBlock Text="{Binding Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6">-</TextBlock>
+                                    <TextBlock FontWeight="Bold">First name:</TextBlock>
+                                    <TextBlock Text="{Binding FirstName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6">-</TextBlock>
+                                    <TextBlock FontWeight="Bold">Last name:</TextBlock>
+                                    <TextBlock Text="{Binding LastName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6">-</TextBlock>
+                                    <TextBlock FontWeight="Bold">Email address:</TextBlock>
+                                    <TextBlock Text="{Binding email, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6">-</TextBlock>
+                                    <Button Margin="0,10" Click="DeleteUser">Delete User</Button>
+                                </StackPanel>
+                            </GroupBox>
+                        </Expander>
+                    </StackPanel>
+                </Border>
+            </ScrollViewer>
+
+        </Grid>
+    </DockPanel>
+
 </Window>

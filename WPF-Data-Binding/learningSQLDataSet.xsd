@@ -64,12 +64,10 @@ SELECT Id, FirstName, LastName, email FROM employee WHERE (Id = @Id)</CommandTex
               <Mapping SourceColumn="email" DataSetColumn="email" />
             </Mappings>
             <Sources>
-              <DbSource ConnectionRef="learningSQLConnectionString (Settings)" DbObjectName="learningSQL.dbo.employee" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="SelectId" Modifier="Public" Name="SelectId" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="SelectId">
+              <DbSource ConnectionRef="learningSQLConnectionString (Settings)" DbObjectName="learningSQL.dbo.employee" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="FillById" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetDataById" GeneratorSourceName="FillById" GetMethodModifier="Public" GetMethodName="GetDataById" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataById" UserSourceName="FillById">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
-                    <CommandText>SELECT        COUNT(*) AS Expr1, Id
-FROM            employee
-GROUP BY Id</CommandText>
+                    <CommandText>SELECT Id FROM dbo.employee</CommandText>
                     <Parameters />
                   </DbCommand>
                 </SelectCommand>
