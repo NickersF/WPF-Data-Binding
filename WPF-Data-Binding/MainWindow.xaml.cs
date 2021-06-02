@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WPF_Data_Binding.learningSQLDataSetTableAdapters;
+using WPF_Data_Binding.ToolsWindows;
 
 namespace WPF_Data_Binding
 {
@@ -28,11 +29,13 @@ namespace WPF_Data_Binding
             InitializeComponent();
         }
 
+        // These private fields are for uopdating records
         private int originalId;
         private string originalFirstName;
         private string originalLastName;
         private string originalEmail;
 
+        // Initial data load
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             learningSQLDataSet learningSQLDataSet = ((learningSQLDataSet)(this.FindResource("learningSQLDataSet")));
@@ -41,8 +44,13 @@ namespace WPF_Data_Binding
             learningSQLDataSetemployeeTableAdapter.Fill(learningSQLDataSet.employee);
             CollectionViewSource employeeViewSource = ((CollectionViewSource)(this.FindResource("employeeViewSource")));
             employeeViewSource.View.MoveCurrentToFirst();
+
+            numOfTables_label.Text = learningSQLDataSet.Tables.Count.ToString();
+            tableName_label.Text = learningSQLDataSet.employee.TableName;
+            numOfEmployees_label.Text = learningSQLDataSet.employee.Rows.Count.ToString();
         }
 
+        // Adds a new row to the database
         private void AddUser(object sender, RoutedEventArgs e)
         {
             learningSQLDataSet learningSQLDataSet = ((learningSQLDataSet)(this.FindResource("learningSQLDataSet")));
@@ -62,8 +70,10 @@ namespace WPF_Data_Binding
 
             addEmployeeDataAdapter.ClearBeforeFill = true;
             addEmployeeDataAdapter.Fill(learningSQLDataSet.employee);
+            numOfEmployees_label.Text = learningSQLDataSet.employee.Rows.Count.ToString();
         }
 
+        // Edits a selected data row
         private void EditUser(object sender, RoutedEventArgs e)
         {
             learningSQLDataSet learningSQLDataSet = ((learningSQLDataSet)(this.FindResource("learningSQLDataSet")));
@@ -81,13 +91,14 @@ namespace WPF_Data_Binding
             editEmployeeTableAdapter.Fill(learningSQLDataSet.employee);
         }
 
+        // Deletes a selected user from the database
         private void DeleteUser(object sender, RoutedEventArgs e)
         {
             learningSQLDataSet learningSQLDataSet = ((learningSQLDataSet)(this.FindResource("learningSQLDataSet")));
             employeeTableAdapter deleteEmployeeTableAdapter = new employeeTableAdapter();
             DataRowView dataRowView = (DataRowView)employeeDataGrid.SelectedItem;
 
-            if ((dataRowView != null) && (employeeDataGrid.SelectedItem.GetType() == typeof(System.Data.DataRowView)))
+            if ((dataRowView != null) && (employeeDataGrid.SelectedItem.GetType() == typeof(DataRowView)))
             {
                 deleteEmployeeTableAdapter.Delete(originalId, originalFirstName, originalLastName, originalEmail);
                 deleteEmployeeTableAdapter.ClearBeforeFill = true;
@@ -97,14 +108,14 @@ namespace WPF_Data_Binding
             {
                 return;
             }
-
         }
 
+        // Selection changed event to capture the original field values
         private void employeeDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             DataRowView dataRowView = (DataRowView)employeeDataGrid.SelectedItem;
 
-            if ((dataRowView != null) && (employeeDataGrid.SelectedItem.GetType() == typeof(System.Data.DataRowView)))
+            if ((dataRowView != null) && (employeeDataGrid.SelectedItem.GetType() == typeof(DataRowView)))
             {
                 originalId = Convert.ToInt32(dataRowView.Row[0]);
                 originalFirstName = (string)dataRowView.Row[1];
@@ -114,6 +125,19 @@ namespace WPF_Data_Binding
             {
                 return;
             }
+        }
+
+        // Close button
+        private void ExitApplication(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        // Opens job description manager window
+        private void Show_ManageJobDescriptions(object sender, RoutedEventArgs e)
+        {
+            ManageJobDescriptions addJobDescription = new ManageJobDescriptions();
+            addJobDescription.Show();
         }
     }
 }

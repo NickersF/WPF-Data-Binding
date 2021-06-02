@@ -4,6 +4,9 @@
 
     partial class learningSQLDataSet
     {
+        partial class job_descriptionsDataTable
+        {
+        }
     }
 }
 

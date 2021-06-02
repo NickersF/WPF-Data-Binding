@@ -9,22 +9,49 @@
     <Window.Resources>
         <local:learningSQLDataSet x:Key="learningSQLDataSet"/>
         <CollectionViewSource x:Key="employeeViewSource" Source="{Binding employee, Source={StaticResource learningSQLDataSet}}"/>
+        <SolidColorBrush x:Key="DeleteColor" Color="#FFCB1313"/>
     </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_New" />
+                <!--<MenuItem Header="_New" />
                 <MenuItem Header="_Open" />
-                <MenuItem Header="_Save" />
+                <MenuItem Header="_Save" />-->
                 <Separator />
-                <MenuItem Header="_Exit" />
+                <MenuItem Header="_Exit" Click="ExitApplication" />
+            </MenuItem>
+            <MenuItem Header="_Tools">
+                <MenuItem Header="_Search Employees" />
+                <MenuItem Header="_Assign Job Descriptions" />
+                <MenuItem Header="_Manage Job Descriptions" Click="Show_ManageJobDescriptions" />
             </MenuItem>
         </Menu>
 
-        <StatusBar DockPanel.Dock="Bottom">
+        <StatusBar DockPanel.Dock="Bottom" BorderThickness="0,1,0,0">
             <StatusBar DockPanel.Dock="Bottom">
                 <StatusBarItem>
-                    <TextBlock Name="lblCursorPosition" Text="Status Bar" />
+                    <TextBlock Text="Number of tables: " FontWeight="Bold" />
+                </StatusBarItem>
+                <StatusBarItem>
+                    <TextBlock x:Name="numOfTables_label" />
+                </StatusBarItem>
+                <Separator />
+                <StatusBarItem>
+                    <TextBlock Text="Table name: " FontWeight="Bold"/>
+                </StatusBarItem>
+                <StatusBarItem>
+                    <TextBlock x:Name="tableName_label" />
+                </StatusBarItem>
+                <Separator />
+                <StatusBarItem>
+                    <TextBlock Text="Active Employees: " FontWeight="Bold"/>
+                </StatusBarItem>
+                <StatusBarItem>
+                    <TextBlock x:Name="numOfEmployees_label" Text="{Binding employee.Table.Row.Table.ItemArray.Length, Mode=OneWay}" >
+                        <TextBlock.DataContext>
+                            <local:learningSQLDataSet/>
+                        </TextBlock.DataContext>
+                    </TextBlock>
                 </StatusBarItem>
             </StatusBar>
         </StatusBar>
@@ -36,12 +63,12 @@
                 <ColumnDefinition Width="17*" MinWidth="256"/>
             </Grid.ColumnDefinitions>
 
-            <DataGrid x:Name="employeeDataGrid"  Grid.Column="0" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" RowDetailsVisibilityMode="VisibleWhenSelected" BorderThickness="0,1,1,1" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" SelectionChanged="employeeDataGrid_SelectionChanged">
+            <DataGrid x:Name="employeeDataGrid"  Grid.Column="0" IsReadOnly="True" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" RowDetailsVisibilityMode="VisibleWhenSelected" BorderThickness="0,1,1,1" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" SelectionChanged="employeeDataGrid_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="idColumn" Binding="{Binding Id}" Header="Id" Width="Auto"/>
                     <DataGridTextColumn x:Name="firstNameColumn" Binding="{Binding FirstName}" Header="First Name" Width="*"/>
                     <DataGridTextColumn x:Name="lastNameColumn" Binding="{Binding LastName}" Header="Last Name" Width="*"/>
-                    <DataGridTextColumn x:Name="emailColumn" Binding="{Binding email}" Header="email" Width="*"/>
+                    <DataGridTextColumn x:Name="emailColumn" Binding="{Binding email}" Header="Email" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
 
@@ -58,7 +85,7 @@
                             <GroupBox Margin="10" Padding="10">
                                 <GroupBox.Header>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock FontWeight="Bold">Add Employee Editor</TextBlock>
+                                        <TextBlock FontWeight="Bold">Basic Information</TextBlock>
                                     </StackPanel>
                                 </GroupBox.Header>
                                 <StackPanel>
@@ -81,7 +108,7 @@
                             <GroupBox Margin="10" Padding="10">
                                 <GroupBox.Header>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock FontWeight="Bold">Edit Selected Employee</TextBlock>
+                                        <TextBlock FontWeight="Bold">Selected Employee Information</TextBlock>
                                     </StackPanel>
                                 </GroupBox.Header>
                                 <StackPanel>
@@ -106,17 +133,17 @@
                             <GroupBox Margin="10" Padding="10">
                                 <GroupBox.Header>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock FontWeight="Bold">Delete Selected Employee</TextBlock>
+                                        <TextBlock FontWeight="Bold">Selected Employee Information</TextBlock>
                                     </StackPanel>
                                 </GroupBox.Header>
                                 <StackPanel>
-                                    <TextBlock FontWeight="Bold">Employee Id:</TextBlock>
+                                    <TextBlock FontWeight="Bold" Foreground="{DynamicResource DeleteColor}">Employee Id:</TextBlock>
                                     <TextBlock Text="{Binding Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6">-</TextBlock>
-                                    <TextBlock FontWeight="Bold">First name:</TextBlock>
+                                    <TextBlock FontWeight="Bold" Foreground="{DynamicResource DeleteColor}">First name:</TextBlock>
                                     <TextBlock Text="{Binding FirstName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6">-</TextBlock>
-                                    <TextBlock FontWeight="Bold">Last name:</TextBlock>
+                                    <TextBlock FontWeight="Bold" Foreground="{DynamicResource DeleteColor}">Last name:</TextBlock>
                                     <TextBlock Text="{Binding LastName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6">-</TextBlock>
-                                    <TextBlock FontWeight="Bold">Email address:</TextBlock>
+                                    <TextBlock FontWeight="Bold" Foreground="{DynamicResource DeleteColor}">Email address:</TextBlock>
                                     <TextBlock Text="{Binding email, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6">-</TextBlock>
                                     <Button Margin="0,10" Click="DeleteUser">Delete User</Button>
                                 </StackPanel>
