@@ -29,6 +29,9 @@ namespace WPF_Data_Binding
             InitializeComponent();
         }
 
+        // Window instances
+        ManageJobDescriptions manageJobDescriptions = new ManageJobDescriptions();
+
         // These private fields are for uopdating records
         private int originalId;
         private string originalFirstName;
@@ -84,11 +87,27 @@ namespace WPF_Data_Binding
             string lastName = editUserLastName.Text;
             string email = editUserEmail.Text;
 
-            learningSQLDataSet.employeeDataTable updatedEmployeeTable = new learningSQLDataSet.employeeDataTable();
-
             editEmployeeTableAdapter.Update(firstName, lastName, email, originalId, originalFirstName, originalLastName, originalEmail);
             editEmployeeTableAdapter.ClearBeforeFill = true;
             editEmployeeTableAdapter.Fill(learningSQLDataSet.employee);
+        }
+
+        // Selection changed event to capture the original field values
+        private void employeeDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataRowView dataRowView = (DataRowView)employeeDataGrid.SelectedItem;
+
+            if ((dataRowView != null) && (employeeDataGrid.SelectedItem.GetType() == typeof(DataRowView)))
+            {
+                originalId = Convert.ToInt32(dataRowView.Row[0]);
+                originalFirstName = (string)dataRowView.Row[1];
+                originalLastName = (string)dataRowView.Row[2];
+                originalEmail = (string)dataRowView[3];
+            }
+            else
+            {
+                return;
+            }
         }
 
         // Deletes a selected user from the database
@@ -110,34 +129,17 @@ namespace WPF_Data_Binding
             }
         }
 
-        // Selection changed event to capture the original field values
-        private void employeeDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            DataRowView dataRowView = (DataRowView)employeeDataGrid.SelectedItem;
-
-            if ((dataRowView != null) && (employeeDataGrid.SelectedItem.GetType() == typeof(DataRowView)))
-            {
-                originalId = Convert.ToInt32(dataRowView.Row[0]);
-                originalFirstName = (string)dataRowView.Row[1];
-                originalLastName = (string)dataRowView.Row[2];
-                originalEmail = (string)dataRowView[3];
-            } else
-            {
-                return;
-            }
-        }
-
         // Close button
         private void ExitApplication(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+            manageJobDescriptions.Close();
         }
 
         // Opens job description manager window
         private void Show_ManageJobDescriptions(object sender, RoutedEventArgs e)
         {
-            ManageJobDescriptions addJobDescription = new ManageJobDescriptions();
-            addJobDescription.Show();
+            manageJobDescriptions.Show();
         }
     }
 }

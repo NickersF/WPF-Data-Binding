@@ -60,13 +60,13 @@
                         </GroupBox.Header>
                         <StackPanel>
                             <TextBlock Margin="0,6,0,0">Job Title:</TextBlock>
-                            <TextBox Text="{Binding job_title, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6"></TextBox>
+                            <TextBox x:Name="editJobTitle_TxtBx" Text="{Binding job_title, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6"></TextBox>
                             <TextBlock>Job Description</TextBlock>
-                            <TextBox Text="{Binding job_description, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6"></TextBox>
+                            <TextBox x:Name="editJobDesc_TxtBx" Text="{Binding job_description, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6"></TextBox>
                             <TextBlock>Hourly Pay Rate:</TextBlock>
-                            <TextBox Text="{Binding hourly_pay_rate, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6"></TextBox>
+                            <TextBox x:Name="editHrlyPay_TxtBx" Text="{Binding hourly_pay_rate, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6"></TextBox>
                             <TextBlock Margin="0,0,10,0">Job Id:</TextBlock>
-                            <TextBox Text="{Binding job_id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6"></TextBox>
+                            <TextBox x:Name="editJobId_TxtBx" Text="{Binding job_id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6"></TextBox>
                             <Button Click="EditJobDescription">Edit Job Description</Button>
                         </StackPanel>
                     </GroupBox>
@@ -82,16 +82,15 @@
                             </StackPanel>
                         </GroupBox.Header>
                         <StackPanel>
-                            <TextBlock Foreground="{DynamicResource DeleteColor}" Margin="0,6,0,0">Job Title:</TextBlock>
-                            <TextBlock Margin="0,0,0,6">-</TextBlock>
-                            <TextBlock Foreground="{DynamicResource DeleteColor}">Job Description</TextBlock>
-                            <TextBlock Margin="0,0,0,6">-</TextBlock>
-                            <TextBlock Foreground="{DynamicResource DeleteColor}">Hourly Pay Rate:</TextBlock>
-                            <TextBlock Margin="0,0,0,6">-</TextBlock>
-                            <TextBlock Foreground="{DynamicResource DeleteColor}">Job Id:</TextBlock>
-                            <TextBlock Margin="0,0,0,6">-</TextBlock>
-                            <Button x:Name="deleteJobDesc_Btn">Delete Job Description</Button>
-
+                            <TextBlock FontWeight="Bold" Foreground="{DynamicResource DeleteColor}" Margin="0,6,0,0">Job Title:</TextBlock>
+                            <TextBlock Text="{Binding job_title, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6">-</TextBlock>
+                            <TextBlock FontWeight="Bold" Foreground="{DynamicResource DeleteColor}">Job Description</TextBlock>
+                            <TextBlock Text="{Binding job_description, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6">-</TextBlock>
+                            <TextBlock FontWeight="Bold" Foreground="{DynamicResource DeleteColor}">Hourly Pay Rate:</TextBlock>
+                            <TextBlock Text="{Binding hourly_pay_rate, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6">-</TextBlock>
+                            <TextBlock FontWeight="Bold" Foreground="{DynamicResource DeleteColor}">Job Id:</TextBlock>
+                            <TextBlock Text="{Binding job_id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6">-</TextBlock>
+                            <Button x:Name="deleteJobDesc_Btn" Click="DeleteJobDescription">Delete Job Description</Button>
                         </StackPanel>
                     </GroupBox>
                 </StackPanel>

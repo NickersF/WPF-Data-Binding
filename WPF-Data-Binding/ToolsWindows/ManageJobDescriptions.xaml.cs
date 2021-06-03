@@ -27,14 +27,15 @@ namespace WPF_Data_Binding.ToolsWindows
         }
 
         // These private fields are for uopdating records
-        private int? originalJobId;
-        private int? originalHourlyPayRate;
+        private int originalJobId;
+        private int originalHourlyPayRate;
         private string originalJobTitle;
         private string originalJobDescription;
 
         // Private field to pass the generated id around methods
         private int generatedJobId;
 
+        // Main grid load
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
@@ -46,10 +47,11 @@ namespace WPF_Data_Binding.ToolsWindows
             job_descriptionsViewSource.View.MoveCurrentToFirst();
         }
 
+        // Adds a job description to the list
         private void AddJobDescription(object sender, RoutedEventArgs e)
         {
             learningSQLDataSet learningSQLDataSet = ((learningSQLDataSet)(this.FindResource("learningSQLDataSet")));
-            job_descriptionsTableAdapter addJob_DescriptionsTableAdapter = new learningSQLDataSetTableAdapters.job_descriptionsTableAdapter();
+            job_descriptionsTableAdapter addJob_DescriptionsTableAdapter = new job_descriptionsTableAdapter();
 
             if (generatedJobId == 0)
             {
@@ -66,7 +68,7 @@ namespace WPF_Data_Binding.ToolsWindows
             string jobTitle = addJobTitle_TxtBx.Text;
             string jobDescription = addJobDesc_TxtBx.Text;
 
-            addJob_DescriptionsTableAdapter.Insert(jobTitle, hourlyPayRate, jobId, jobDescription);
+            addJob_DescriptionsTableAdapter.Insert(jobTitle, jobDescription, hourlyPayRate, jobId);
 
             generatedJobId = 0;
             addJobId_Label.Text = "-";
@@ -78,19 +80,44 @@ namespace WPF_Data_Binding.ToolsWindows
             addJob_DescriptionsTableAdapter.Fill(learningSQLDataSet.job_descriptions);
         }
 
-        private void GenerateJobId(object sender, RoutedEventArgs e)
-        {
-            Random random = new Random();
-
-            generatedJobId = random.Next(1, 50);
-            addJobId_Label.Text = generatedJobId.ToString();
-        }
-
+        // Edits a job description
         private void EditJobDescription(object sender, RoutedEventArgs e)
         {
+            learningSQLDataSet learningSQLDataSet = ((learningSQLDataSet)(this.FindResource("learningSQLDataSet")));
+            job_descriptionsTableAdapter editJob_DescriptionsTableAdapter = new job_descriptionsTableAdapter();
 
+            string editedJobTitle = editJobTitle_TxtBx.Text;
+            int editedHourlyPayRate = int.Parse(editHrlyPay_TxtBx.Text);
+            int editedJobId = int.Parse(editJobId_TxtBx.Text);
+            string editedJobDesc = editJobDesc_TxtBx.Text;
+
+
+            editJob_DescriptionsTableAdapter.Update(editedJobTitle, editedJobDesc, editedHourlyPayRate, editedJobId, originalJobTitle, originalJobDescription, originalHourlyPayRate, originalJobId);
+            editJob_DescriptionsTableAdapter.ClearBeforeFill = true;
+            editJob_DescriptionsTableAdapter.Fill(learningSQLDataSet.job_descriptions);
         }
 
+        // Deletes a job description
+        private void DeleteJobDescription(object sender, RoutedEventArgs e)
+        {
+            learningSQLDataSet learningSQLDataSet = ((learningSQLDataSet)(this.FindResource("learningSQLDataSet")));
+            job_descriptionsTableAdapter deleteJob_descriptionsTableAdapter = new job_descriptionsTableAdapter();
+
+            DataRowView dataRowView = (DataRowView)job_descriptionsDataGrid.SelectedItem;
+
+            if ((dataRowView != null) && (job_descriptionsDataGrid.SelectedItem.GetType() == typeof(DataRowView)))
+            {
+                deleteJob_descriptionsTableAdapter.Delete(originalJobTitle, originalJobDescription, originalHourlyPayRate, originalJobId);
+                deleteJob_descriptionsTableAdapter.ClearBeforeFill = true;
+                deleteJob_descriptionsTableAdapter.Fill(learningSQLDataSet.job_descriptions);
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        // Stores the selected gridView row for various data operations
         private void job_descriptionsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             DataRowView dataRowView = (DataRowView)job_descriptionsDataGrid.SelectedItem;
@@ -98,14 +125,23 @@ namespace WPF_Data_Binding.ToolsWindows
             if ((dataRowView != null) && (job_descriptionsDataGrid.SelectedItem.GetType() == typeof(DataRowView)))
             {
                 originalJobTitle = (string)dataRowView.Row[0];
-                originalHourlyPayRate = Convert.ToInt32(dataRowView[1]);
-                originalJobId = dataRowView.Row[2] as int?;
-                originalJobDescription = ConvertFromDBVal<string>(dataRowView.Row[3]);
+                originalJobDescription = (string)dataRowView.Row[1];
+                originalHourlyPayRate = Convert.ToInt32(dataRowView[2]);
+                originalJobId = Convert.ToInt32(dataRowView.Row[3]);
             }
             else
             {
                 return;
             }
+        }
+
+        // Generates a job id
+        private void GenerateJobId(object sender, RoutedEventArgs e)
+        {
+            Random random = new Random();
+
+            generatedJobId = random.Next(1, 50);
+            addJobId_Label.Text = generatedJobId.ToString();
         }
 
         // Generic utility function to convert DBNull

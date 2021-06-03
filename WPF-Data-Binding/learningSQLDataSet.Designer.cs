@@ -622,11 +622,11 @@ namespace WPF_Data_Binding {
             
             private global::System.Data.DataColumn columnjob_title;
             
+            private global::System.Data.DataColumn columnjob_description;
+            
             private global::System.Data.DataColumn columnhourly_pay_rate;
             
             private global::System.Data.DataColumn columnjob_id;
-            
-            private global::System.Data.DataColumn columnjob_description;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
@@ -671,6 +671,14 @@ namespace WPF_Data_Binding {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn job_descriptionColumn {
+                get {
+                    return this.columnjob_description;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public global::System.Data.DataColumn hourly_pay_rateColumn {
                 get {
                     return this.columnhourly_pay_rate;
@@ -682,14 +690,6 @@ namespace WPF_Data_Binding {
             public global::System.Data.DataColumn job_idColumn {
                 get {
                     return this.columnjob_id;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn job_descriptionColumn {
-                get {
-                    return this.columnjob_description;
                 }
             }
             
@@ -730,16 +730,23 @@ namespace WPF_Data_Binding {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public job_descriptionsRow Addjob_descriptionsRow(string job_title, int hourly_pay_rate, int job_id, string job_description) {
+            public job_descriptionsRow Addjob_descriptionsRow(string job_title, string job_description, int hourly_pay_rate, int job_id) {
                 job_descriptionsRow rowjob_descriptionsRow = ((job_descriptionsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         job_title,
+                        job_description,
                         hourly_pay_rate,
-                        job_id,
-                        job_description};
+                        job_id};
                 rowjob_descriptionsRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowjob_descriptionsRow);
                 return rowjob_descriptionsRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public job_descriptionsRow FindByjob_id(int job_id) {
+                return ((job_descriptionsRow)(this.Rows.Find(new object[] {
+                            job_id})));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -760,9 +767,9 @@ namespace WPF_Data_Binding {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             internal void InitVars() {
                 this.columnjob_title = base.Columns["job_title"];
+                this.columnjob_description = base.Columns["job_description"];
                 this.columnhourly_pay_rate = base.Columns["hourly_pay_rate"];
                 this.columnjob_id = base.Columns["job_id"];
-                this.columnjob_description = base.Columns["job_description"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -770,14 +777,21 @@ namespace WPF_Data_Binding {
             private void InitClass() {
                 this.columnjob_title = new global::System.Data.DataColumn("job_title", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnjob_title);
+                this.columnjob_description = new global::System.Data.DataColumn("job_description", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnjob_description);
                 this.columnhourly_pay_rate = new global::System.Data.DataColumn("hourly_pay_rate", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnhourly_pay_rate);
                 this.columnjob_id = new global::System.Data.DataColumn("job_id", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnjob_id);
-                this.columnjob_description = new global::System.Data.DataColumn("job_description", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnjob_description);
+                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
+                                this.columnjob_id}, true));
+                this.columnjob_title.AllowDBNull = false;
                 this.columnjob_title.MaxLength = 50;
+                this.columnjob_description.AllowDBNull = false;
                 this.columnjob_description.MaxLength = 50;
+                this.columnhourly_pay_rate.AllowDBNull = false;
+                this.columnjob_id.AllowDBNull = false;
+                this.columnjob_id.Unique = true;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -981,12 +995,7 @@ namespace WPF_Data_Binding {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public string job_title {
                 get {
-                    try {
-                        return ((string)(this[this.tablejob_descriptions.job_titleColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'job_title\' in table \'job_descriptions\' is DBNull.", e);
-                    }
+                    return ((string)(this[this.tablejob_descriptions.job_titleColumn]));
                 }
                 set {
                     this[this.tablejob_descriptions.job_titleColumn] = value;
@@ -995,14 +1004,20 @@ namespace WPF_Data_Binding {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string job_description {
+                get {
+                    return ((string)(this[this.tablejob_descriptions.job_descriptionColumn]));
+                }
+                set {
+                    this[this.tablejob_descriptions.job_descriptionColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public int hourly_pay_rate {
                 get {
-                    try {
-                        return ((int)(this[this.tablejob_descriptions.hourly_pay_rateColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'hourly_pay_rate\' in table \'job_descriptions\' is DBNull.", e);
-                    }
+                    return ((int)(this[this.tablejob_descriptions.hourly_pay_rateColumn]));
                 }
                 set {
                     this[this.tablejob_descriptions.hourly_pay_rateColumn] = value;
@@ -1013,80 +1028,11 @@ namespace WPF_Data_Binding {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public int job_id {
                 get {
-                    try {
-                        return ((int)(this[this.tablejob_descriptions.job_idColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'job_id\' in table \'job_descriptions\' is DBNull.", e);
-                    }
+                    return ((int)(this[this.tablejob_descriptions.job_idColumn]));
                 }
                 set {
                     this[this.tablejob_descriptions.job_idColumn] = value;
                 }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string job_description {
-                get {
-                    try {
-                        return ((string)(this[this.tablejob_descriptions.job_descriptionColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'job_description\' in table \'job_descriptions\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablejob_descriptions.job_descriptionColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool Isjob_titleNull() {
-                return this.IsNull(this.tablejob_descriptions.job_titleColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void Setjob_titleNull() {
-                this[this.tablejob_descriptions.job_titleColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool Ishourly_pay_rateNull() {
-                return this.IsNull(this.tablejob_descriptions.hourly_pay_rateColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void Sethourly_pay_rateNull() {
-                this[this.tablejob_descriptions.hourly_pay_rateColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool Isjob_idNull() {
-                return this.IsNull(this.tablejob_descriptions.job_idColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void Setjob_idNull() {
-                this[this.tablejob_descriptions.job_idColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool Isjob_descriptionNull() {
-                return this.IsNull(this.tablejob_descriptions.job_descriptionColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void Setjob_descriptionNull() {
-                this[this.tablejob_descriptions.job_descriptionColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -1691,19 +1637,42 @@ SELECT Id, FirstName, LastName, email FROM employee WHERE (Id = @Id)";
             tableMapping.SourceTable = "Table";
             tableMapping.DataSetTable = "job_descriptions";
             tableMapping.ColumnMappings.Add("job_title", "job_title");
+            tableMapping.ColumnMappings.Add("job_description", "job_description");
             tableMapping.ColumnMappings.Add("hourly_pay_rate", "hourly_pay_rate");
             tableMapping.ColumnMappings.Add("job_id", "job_id");
-            tableMapping.ColumnMappings.Add("job_description", "job_description");
             this._adapter.TableMappings.Add(tableMapping);
+            this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
+            this._adapter.DeleteCommand.Connection = this.Connection;
+            this._adapter.DeleteCommand.CommandText = "DELETE FROM [dbo].[job_descriptions] WHERE (([job_title] = @Original_job_title) A" +
+                "ND ([job_description] = @Original_job_description) AND ([hourly_pay_rate] = @Ori" +
+                "ginal_hourly_pay_rate) AND ([job_id] = @Original_job_id))";
+            this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_job_title", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "job_title", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_job_description", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "job_description", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_hourly_pay_rate", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "hourly_pay_rate", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_job_id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "job_id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [job_descriptions] ([job_title], [hourly_pay_rate], [job_id], [job_de" +
-                "scription]) VALUES (@job_title, @hourly_pay_rate, @job_id, @job_description)";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [dbo].[job_descriptions] ([job_title], [job_description], [hourly_pay_rate], [job_id]) VALUES (@job_title, @job_description, @hourly_pay_rate, @job_id);
+SELECT job_title, job_description, hourly_pay_rate, job_id FROM job_descriptions WHERE (job_id = @job_id)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@job_title", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "job_title", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@job_description", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "job_description", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@hourly_pay_rate", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "hourly_pay_rate", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@job_id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "job_id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@job_description", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "job_description", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
+            this._adapter.UpdateCommand.Connection = this.Connection;
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [dbo].[job_descriptions] SET [job_title] = @job_title, [job_description] = @job_description, [hourly_pay_rate] = @hourly_pay_rate, [job_id] = @job_id WHERE (([job_title] = @Original_job_title) AND ([job_description] = @Original_job_description) AND ([hourly_pay_rate] = @Original_hourly_pay_rate) AND ([job_id] = @Original_job_id));
+SELECT job_title, job_description, hourly_pay_rate, job_id FROM job_descriptions WHERE (job_id = @job_id)";
+            this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@job_title", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "job_title", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@job_description", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "job_description", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@hourly_pay_rate", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "hourly_pay_rate", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@job_id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "job_id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_job_title", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "job_title", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_job_description", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "job_description", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_hourly_pay_rate", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "hourly_pay_rate", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_job_id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "job_id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1719,7 +1688,8 @@ SELECT Id, FirstName, LastName, email FROM employee WHERE (Id = @Id)";
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT job_title, hourly_pay_rate, job_id, job_description FROM job_descriptions";
+            this._commandCollection[0].CommandText = "SELECT job_title, job_description, hourly_pay_rate, job_id FROM dbo.job_descripti" +
+                "ons";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -1779,32 +1749,57 @@ SELECT Id, FirstName, LastName, email FROM employee WHERE (Id = @Id)";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, true)]
+        public virtual int Delete(string Original_job_title, string Original_job_description, int Original_hourly_pay_rate, int Original_job_id) {
+            if ((Original_job_title == null)) {
+                throw new global::System.ArgumentNullException("Original_job_title");
+            }
+            else {
+                this.Adapter.DeleteCommand.Parameters[0].Value = ((string)(Original_job_title));
+            }
+            if ((Original_job_description == null)) {
+                throw new global::System.ArgumentNullException("Original_job_description");
+            }
+            else {
+                this.Adapter.DeleteCommand.Parameters[1].Value = ((string)(Original_job_description));
+            }
+            this.Adapter.DeleteCommand.Parameters[2].Value = ((int)(Original_hourly_pay_rate));
+            this.Adapter.DeleteCommand.Parameters[3].Value = ((int)(Original_job_id));
+            global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
+            if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                this.Adapter.DeleteCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.DeleteCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    this.Adapter.DeleteCommand.Connection.Close();
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(string job_title, global::System.Nullable<int> hourly_pay_rate, global::System.Nullable<int> job_id, string job_description) {
+        public virtual int Insert(string job_title, string job_description, int hourly_pay_rate, int job_id) {
             if ((job_title == null)) {
-                this.Adapter.InsertCommand.Parameters[0].Value = global::System.DBNull.Value;
+                throw new global::System.ArgumentNullException("job_title");
             }
             else {
                 this.Adapter.InsertCommand.Parameters[0].Value = ((string)(job_title));
             }
-            if ((hourly_pay_rate.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[1].Value = ((int)(hourly_pay_rate.Value));
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[1].Value = global::System.DBNull.Value;
-            }
-            if ((job_id.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[2].Value = ((int)(job_id.Value));
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[2].Value = global::System.DBNull.Value;
-            }
             if ((job_description == null)) {
-                this.Adapter.InsertCommand.Parameters[3].Value = global::System.DBNull.Value;
+                throw new global::System.ArgumentNullException("job_description");
             }
             else {
-                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(job_description));
+                this.Adapter.InsertCommand.Parameters[1].Value = ((string)(job_description));
             }
+            this.Adapter.InsertCommand.Parameters[2].Value = ((int)(hourly_pay_rate));
+            this.Adapter.InsertCommand.Parameters[3].Value = ((int)(job_id));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -1819,6 +1814,63 @@ SELECT Id, FirstName, LastName, email FROM employee WHERE (Id = @Id)";
                     this.Adapter.InsertCommand.Connection.Close();
                 }
             }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
+        public virtual int Update(string job_title, string job_description, int hourly_pay_rate, int job_id, string Original_job_title, string Original_job_description, int Original_hourly_pay_rate, int Original_job_id) {
+            if ((job_title == null)) {
+                throw new global::System.ArgumentNullException("job_title");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[0].Value = ((string)(job_title));
+            }
+            if ((job_description == null)) {
+                throw new global::System.ArgumentNullException("job_description");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(job_description));
+            }
+            this.Adapter.UpdateCommand.Parameters[2].Value = ((int)(hourly_pay_rate));
+            this.Adapter.UpdateCommand.Parameters[3].Value = ((int)(job_id));
+            if ((Original_job_title == null)) {
+                throw new global::System.ArgumentNullException("Original_job_title");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(Original_job_title));
+            }
+            if ((Original_job_description == null)) {
+                throw new global::System.ArgumentNullException("Original_job_description");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(Original_job_description));
+            }
+            this.Adapter.UpdateCommand.Parameters[6].Value = ((int)(Original_hourly_pay_rate));
+            this.Adapter.UpdateCommand.Parameters[7].Value = ((int)(Original_job_id));
+            global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
+            if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                this.Adapter.UpdateCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.UpdateCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    this.Adapter.UpdateCommand.Connection.Close();
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
+        public virtual int Update(string job_title, string job_description, int hourly_pay_rate, string Original_job_title, string Original_job_description, int Original_hourly_pay_rate, int Original_job_id) {
+            return this.Update(job_title, job_description, hourly_pay_rate, Original_job_id, Original_job_title, Original_job_description, Original_hourly_pay_rate, Original_job_id);
         }
     }
     
