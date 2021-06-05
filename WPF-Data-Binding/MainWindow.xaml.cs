@@ -34,6 +34,7 @@ namespace WPF_Data_Binding
 
         // These private fields are for uopdating records
         private int originalId;
+        private int? originalJobId;
         private string originalFirstName;
         private string originalLastName;
         private string originalEmail;
@@ -65,7 +66,7 @@ namespace WPF_Data_Binding
             string lastName = addUserLastName.Text;
             string email = addUserEmail.Text;
 
-            addEmployeeDataAdapter.Insert(employeeId, firstName, lastName, email);
+            addEmployeeDataAdapter.Insert(employeeId, firstName, lastName, email, null);
 
             addUserFirstName.Text = "";
             addUserLastName.Text = "";
@@ -86,8 +87,9 @@ namespace WPF_Data_Binding
             string firstName = editUserFirstName.Text;
             string lastName = editUserLastName.Text;
             string email = editUserEmail.Text;
+            int? jobId = null;
 
-            editEmployeeTableAdapter.Update(firstName, lastName, email, originalId, originalFirstName, originalLastName, originalEmail);
+            editEmployeeTableAdapter.Update(firstName, lastName, email, jobId, originalId, originalFirstName, originalLastName, originalEmail, originalJobId);
             editEmployeeTableAdapter.ClearBeforeFill = true;
             editEmployeeTableAdapter.Fill(learningSQLDataSet.employee);
         }
@@ -103,6 +105,7 @@ namespace WPF_Data_Binding
                 originalFirstName = (string)dataRowView.Row[1];
                 originalLastName = (string)dataRowView.Row[2];
                 originalEmail = (string)dataRowView[3];
+                originalJobId = null;
             }
             else
             {
@@ -119,7 +122,7 @@ namespace WPF_Data_Binding
 
             if ((dataRowView != null) && (employeeDataGrid.SelectedItem.GetType() == typeof(DataRowView)))
             {
-                deleteEmployeeTableAdapter.Delete(originalId, originalFirstName, originalLastName, originalEmail);
+                deleteEmployeeTableAdapter.Delete(originalId, originalFirstName, originalLastName, originalEmail, originalJobId);
                 deleteEmployeeTableAdapter.ClearBeforeFill = true;
                 deleteEmployeeTableAdapter.Fill(learningSQLDataSet.employee);
             }
@@ -139,7 +142,14 @@ namespace WPF_Data_Binding
         // Opens job description manager window
         private void Show_ManageJobDescriptions(object sender, RoutedEventArgs e)
         {
+            ManageJobDescriptions manageJobDescriptions = new ManageJobDescriptions();
             manageJobDescriptions.Show();
+        }
+
+        private void Show_AssignJobDescriptions(object sender, RoutedEventArgs e)
+        {
+            AssignJobDescriptions assignJobDescriptions = new AssignJobDescriptions();
+            assignJobDescriptions.Show();
         }
     }
 }

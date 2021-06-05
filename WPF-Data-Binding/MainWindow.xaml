@@ -22,7 +22,7 @@
             </MenuItem>
             <MenuItem Header="_Tools">
                 <MenuItem Header="_Search Employees" />
-                <MenuItem Header="_Assign Job Descriptions" />
+                <MenuItem Header="_Assign Job Descriptions" Click="Show_AssignJobDescriptions" />
                 <MenuItem Header="_Manage Job Descriptions" Click="Show_ManageJobDescriptions" />
             </MenuItem>
         </Menu>
@@ -69,6 +69,7 @@
                     <DataGridTextColumn x:Name="firstNameColumn" Binding="{Binding FirstName}" Header="First Name" Width="*"/>
                     <DataGridTextColumn x:Name="lastNameColumn" Binding="{Binding LastName}" Header="Last Name" Width="*"/>
                     <DataGridTextColumn x:Name="emailColumn" Binding="{Binding email}" Header="Email" Width="*"/>
+                    <DataGridTextColumn x:Name="jobIdColumn" Binding="{Binding job_id}" Header="Job Id" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
 

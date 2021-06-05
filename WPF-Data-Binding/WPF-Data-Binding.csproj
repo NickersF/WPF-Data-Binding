@@ -157,6 +157,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ToolsWindows\AssignJobDescriptions.xaml.cs">
+      <DependentUpon>AssignJobDescriptions.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ToolsWindows\ManageJobDescriptions.xaml.cs">
       <DependentUpon>ManageJobDescriptions.xaml</DependentUpon>
     </Compile>
@@ -180,6 +183,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ToolsWindows\AssignJobDescriptions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ToolsWindows\ManageJobDescriptions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
