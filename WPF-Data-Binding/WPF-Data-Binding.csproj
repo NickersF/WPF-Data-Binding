@@ -157,12 +157,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataRelations.xaml.cs">
+      <DependentUpon>DataRelations.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ToolsWindows\AssignJobDescriptions.xaml.cs">
       <DependentUpon>AssignJobDescriptions.xaml</DependentUpon>
     </Compile>
     <Compile Include="ToolsWindows\ManageJobDescriptions.xaml.cs">
       <DependentUpon>ManageJobDescriptions.xaml</DependentUpon>
     </Compile>
+    <Page Include="DataRelations.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

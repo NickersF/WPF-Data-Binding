@@ -1,40 +1,95 @@
-﻿<Window x:Class="WPF_Data_Binding.ToolsWindows.AssignJobDescriptions"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_Data_Binding.ToolsWindows"
+        xmlns:WPF_Data_Binding="clr-namespace:WPF_Data_Binding" xmlns:learningSQLDataSetTableAdapters="clr-namespace:WPF_Data_Binding.learningSQLDataSetTableAdapters" x:Class="WPF_Data_Binding.ToolsWindows.AssignJobDescriptions"
         mc:Ignorable="d"
-        Title="Assign Job Descriptions" Height="450" Width="900
-        ">
-    <Grid>
+        Title="Assign Job Descriptions" Height="272" Width="600     " Loaded="Window_Loaded" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+        <WPF_Data_Binding:learningSQLDataSet x:Key="learningSQLDataSet"/>
+        <CollectionViewSource x:Key="employeeViewSource" Source="{Binding employee, Source={StaticResource learningSQLDataSet}}"/>
+        <CollectionViewSource x:Key="job_descriptionsViewSource" Source="{Binding job_descriptions, Source={StaticResource learningSQLDataSet}}"/>
+    </Window.Resources>
+
+    <Grid DataContext="{StaticResource employeeViewSource}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="75*"/>
             <ColumnDefinition Width="75*"/>
             <ColumnDefinition Width="73*"/>
         </Grid.ColumnDefinitions>
 
         <Border Grid.Row="0" Grid.Column="0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
             <StackPanel Margin="10">
-                <GroupBox Height="240">
+                <GroupBox>
                     <GroupBox.Header>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock FontWeight="Bold">Header</TextBlock>
+                            <TextBlock FontWeight="Bold"><Run Text="Select Employee"/></TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <StackPanel>
+                        <ComboBox x:Name="selectEmployee_CmbBx" ItemsSource="{Binding}" Margin="6">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Margin="2" Text="{Binding FirstName}"/>
+                                        <TextBlock Margin="2" Text="{Binding LastName}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                </GroupBox>
+                
+                <GroupBox Height="153">
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontWeight="Bold"><Run Text="Select Job Description"/></TextBlock>
                         </StackPanel>
                     </GroupBox.Header>
                     <StackPanel>
 
+                        <ComboBox x:Name="selectJobDesc_CmbBx" ItemsSource="{Binding}" Margin="6" DataContext="{StaticResource job_descriptionsViewSource}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Margin="2" Text="{Binding job_title}"/>
+                                        <!--<TextBlock Margin="2" Text="{Binding job_id}"/>-->
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <Button Margin="6,10,6,6" Click="AssignJobDescription">Assign Job Description</Button>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
         </Border>
 
         <Border Grid.Row="0" Grid.Column="1" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
-
-        </Border>
-
-        <Border Grid.Row="0" Grid.Column="2" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
-
+            <StackPanel Margin="10">
+                <GroupBox Height="215">
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontWeight="Bold"><Run Text="Current Selected Empolyee"/></TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold">Employee Id:</TextBlock>
+                        <TextBlock Text="{Binding Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6">-</TextBlock>
+                        <TextBlock FontWeight="Bold">First name:</TextBlock>
+                        <TextBlock Text="{Binding FirstName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6">-</TextBlock>
+                        <TextBlock FontWeight="Bold">Last name:</TextBlock>
+                        <TextBlock Text="{Binding LastName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6">-</TextBlock>
+                        <TextBlock FontWeight="Bold">Email address:</TextBlock>
+                        <TextBlock Text="{Binding email, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6">-</TextBlock>
+                        <TextBlock FontWeight="Bold">Job Id:</TextBlock>
+                        <TextBlock Text="{Binding job_id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,0,6">-</TextBlock>
+                    </StackPanel>
+                    
+                </GroupBox>
+            </StackPanel>
         </Border>
     </Grid>
 </Window>

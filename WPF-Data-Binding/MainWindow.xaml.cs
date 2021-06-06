@@ -43,15 +43,16 @@ namespace WPF_Data_Binding
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             learningSQLDataSet learningSQLDataSet = ((learningSQLDataSet)(this.FindResource("learningSQLDataSet")));
+
             // Load data into the table employee. You can modify this code as needed.
             employeeTableAdapter learningSQLDataSetemployeeTableAdapter = new employeeTableAdapter();
             learningSQLDataSetemployeeTableAdapter.Fill(learningSQLDataSet.employee);
             CollectionViewSource employeeViewSource = ((CollectionViewSource)(this.FindResource("employeeViewSource")));
             employeeViewSource.View.MoveCurrentToFirst();
 
-            numOfTables_label.Text = learningSQLDataSet.Tables.Count.ToString();
-            tableName_label.Text = learningSQLDataSet.employee.TableName;
-            numOfEmployees_label.Text = learningSQLDataSet.employee.Rows.Count.ToString();
+            numOfTables_label.Text      = learningSQLDataSet.Tables.Count.ToString();
+            tableName_label.Text        = learningSQLDataSet.employee.TableName;
+            numOfEmployees_label.Text   = learningSQLDataSet.employee.Rows.Count.ToString();
         }
 
         // Adds a new row to the database
@@ -59,18 +60,21 @@ namespace WPF_Data_Binding
         {
             learningSQLDataSet learningSQLDataSet = ((learningSQLDataSet)(this.FindResource("learningSQLDataSet")));
             employeeTableAdapter addEmployeeDataAdapter = new employeeTableAdapter();
+            DataRowView dataRowView = (DataRowView)employeeDataGrid.SelectedItem;
+
             Random random = new Random();
 
-            int employeeId = random.Next(0, 1000);
-            string firstName = addUserFirstName.Text;
-            string lastName = addUserLastName.Text;
-            string email = addUserEmail.Text;
+            int employeeId      = random.Next(0, 1000);
+            string firstName    = addUserFirstName.Text;
+            string lastName     = addUserLastName.Text;
+            string email        = addUserEmail.Text;
+            int? jobId          = 0;
 
-            addEmployeeDataAdapter.Insert(employeeId, firstName, lastName, email, null);
+            addEmployeeDataAdapter.Insert(employeeId, firstName, lastName, email, jobId);
 
-            addUserFirstName.Text = "";
-            addUserLastName.Text = "";
-            addUserEmail.Text = "";
+            addUserFirstName.Text   = "";
+            addUserLastName.Text    = "";
+            addUserEmail.Text       = "";
 
             addEmployeeDataAdapter.ClearBeforeFill = true;
             addEmployeeDataAdapter.Fill(learningSQLDataSet.employee);
@@ -82,12 +86,13 @@ namespace WPF_Data_Binding
         {
             learningSQLDataSet learningSQLDataSet = ((learningSQLDataSet)(this.FindResource("learningSQLDataSet")));
             employeeTableAdapter editEmployeeTableAdapter = new employeeTableAdapter();
+            DataRowView dataRowView = (DataRowView)employeeDataGrid.SelectedItem;
 
-            int id = int.Parse(editUserId.Text);
-            string firstName = editUserFirstName.Text;
-            string lastName = editUserLastName.Text;
-            string email = editUserEmail.Text;
-            int? jobId = null;
+            int id              = int.Parse(editUserId.Text);
+            string firstName    = editUserFirstName.Text;
+            string lastName     = editUserLastName.Text;
+            string email        = editUserEmail.Text;
+            int? jobId          = ConvertFromDBVal<int>(dataRowView.Row[4]);
 
             editEmployeeTableAdapter.Update(firstName, lastName, email, jobId, originalId, originalFirstName, originalLastName, originalEmail, originalJobId);
             editEmployeeTableAdapter.ClearBeforeFill = true;
@@ -104,8 +109,8 @@ namespace WPF_Data_Binding
                 originalId = Convert.ToInt32(dataRowView.Row[0]);
                 originalFirstName = (string)dataRowView.Row[1];
                 originalLastName = (string)dataRowView.Row[2];
-                originalEmail = (string)dataRowView[3];
-                originalJobId = null;
+                originalEmail = (string)dataRowView.Row[3];
+                originalJobId = ConvertFromDBVal<int>(dataRowView.Row[4]);
             }
             else
             {
@@ -122,6 +127,7 @@ namespace WPF_Data_Binding
 
             if ((dataRowView != null) && (employeeDataGrid.SelectedItem.GetType() == typeof(DataRowView)))
             {
+                originalJobId = ConvertFromDBVal<int>(dataRowView.Row[4]);
                 deleteEmployeeTableAdapter.Delete(originalId, originalFirstName, originalLastName, originalEmail, originalJobId);
                 deleteEmployeeTableAdapter.ClearBeforeFill = true;
                 deleteEmployeeTableAdapter.Fill(learningSQLDataSet.employee);
@@ -132,11 +138,20 @@ namespace WPF_Data_Binding
             }
         }
 
+        // Refreshes the employee grid view
+        private void RefreshEmployeeGrid(object sender, RoutedEventArgs e)
+        {
+            learningSQLDataSet learningSQLDataSet = ((learningSQLDataSet)(this.FindResource("learningSQLDataSet")));
+            employeeTableAdapter refreshEmployeeTableAdapter = new employeeTableAdapter();
+
+            refreshEmployeeTableAdapter.ClearBeforeFill = true;
+            refreshEmployeeTableAdapter.Fill(learningSQLDataSet.employee);
+        }
+
         // Close button
         private void ExitApplication(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
-            manageJobDescriptions.Close();
         }
 
         // Opens job description manager window
@@ -146,10 +161,25 @@ namespace WPF_Data_Binding
             manageJobDescriptions.Show();
         }
 
+        // Opens add job descriptions window
         private void Show_AssignJobDescriptions(object sender, RoutedEventArgs e)
         {
             AssignJobDescriptions assignJobDescriptions = new AssignJobDescriptions();
-            assignJobDescriptions.Show();
+            assignJobDescriptions.Show(); 
         }
+
+        // Generic utility function to convert DBNull
+        public static T ConvertFromDBVal<T>(object obj)
+        {
+            if (obj == null || obj == DBNull.Value)
+            {
+                return default(T); // returns the default value for the type
+            }
+            else
+            {
+                return (T)obj;
+            }
+        }
+
     }
 }
