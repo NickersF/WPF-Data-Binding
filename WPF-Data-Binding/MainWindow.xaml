@@ -22,7 +22,7 @@
                 <MenuItem Header="_Exit" Click="ExitApplication" />
             </MenuItem>
             <MenuItem Header="_Tools">
-                <MenuItem Header="_Search Employees" />
+                <MenuItem Header="_View by Job Description" Click="Show_ViewbyJobDescription" />
                 <MenuItem Header="_Assign Job Descriptions" Click="Show_AssignJobDescriptions" />
                 <MenuItem Header="_Manage Job Descriptions" Click="Show_ManageJobDescriptions" />
             </MenuItem>
